@@ -13,13 +13,15 @@ export class AuthController {
       await this.authService.create(payload);
     } catch (error) {
       return res.status(400).json({
-        message: error.message,
+        message:
+          error.name === 'UniqueConstraintViolationException'
+            ? 'Username has been used'
+            : error.message,
       });
     }
 
     return res.json({
       message: 'User registered',
-      data: payload,
     });
   }
 }
