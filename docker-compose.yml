@@ -2,7 +2,7 @@ version: '3.5'
 
 services:
   db:
-    image: postgres
+    image: postgres:14
     restart: always
     environment:
       - POSTGRES_PASSWORD=postgres
@@ -11,8 +11,10 @@ services:
       - ./pgdata:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Mount initialization script
     ports:
-      - '5433:5433'
+      - '5433:5432'
     command: ["postgres", "-c", "config_file=/var/lib/postgresql/data/postgresql.conf"]
+    networks:
+      - backend
 
   app:
     build:
@@ -22,8 +24,13 @@ services:
     environment:
       - PORT=${PORT}
     ports:
-      - '3000:3000'
+      - '3001:3001'
     depends_on:
       - db
     volumes:
       - ./src:/app/src
+    networks:
+      - backend
+
+networks:
+  backend:

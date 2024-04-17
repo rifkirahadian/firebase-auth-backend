@@ -15,6 +15,7 @@ import { User } from './entities/user.entity';
       password: process.env.DB_PASSWORD,
       port: parseInt(process.env.DB_PORT, 10),
       entities: [User],
+      host: process.env.DB_HOST,
       dbName: process.env.DB_NAME,
       driver: PostgreSqlDriver,
     }),
