@@ -15,7 +15,7 @@ export class AuthController {
       return res.status(400).json({
         message:
           error.name === 'UniqueConstraintViolationException'
-            ? 'Username has been used'
+            ? 'Username/Uid has been used'
             : error.message,
       });
     }

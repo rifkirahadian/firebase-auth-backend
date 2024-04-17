@@ -4,6 +4,10 @@ import { IsNotEmpty } from 'class-validator';
 export class RegisterDto {
   @ApiProperty()
   @IsNotEmpty()
+  uid: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
   username: string;
 
   @ApiProperty()

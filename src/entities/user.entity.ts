@@ -1,16 +1,9 @@
-import {
-  BeforeCreate,
-  BeforeUpdate,
-  Entity,
-  PrimaryKey,
-  Property,
-} from '@mikro-orm/core';
-import * as bcrypt from 'bcrypt';
+import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
 
 @Entity()
 export class User {
   @PrimaryKey()
-  uid: number;
+  uid: string;
 
   @Property({
     unique: true,
@@ -35,13 +28,4 @@ export class User {
 
   @Property({ type: 'Date', onUpdate: () => new Date() })
   updatedAt = new Date();
-
-  @BeforeCreate()
-  @BeforeUpdate()
-  async hashPassword(): Promise<void> {
-    if (this.password) {
-      const saltRounds = 10;
-      this.password = await bcrypt.hash(this.password, saltRounds);
-    }
-  }
 }
