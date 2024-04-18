@@ -14,3 +14,9 @@ export class RegisterDto {
   @IsNotEmpty()
   password: string;
 }
+
+export class LastLoginDto {
+  @ApiProperty()
+  @IsNotEmpty()
+  uid: string;
+}

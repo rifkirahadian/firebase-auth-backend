@@ -1,7 +1,7 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, Post, Put, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Response } from 'express';
-import { RegisterDto } from './auth.dto';
+import { LastLoginDto, RegisterDto } from './auth.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -22,6 +22,22 @@ export class AuthController {
 
     return res.json({
       message: 'User registered',
+    });
+  }
+
+  @Put('last-login')
+  async lastLogin(@Res() res: Response, @Body() payload: LastLoginDto) {
+    try {
+      const user = await this.authService.getUser(payload.uid);
+      await this.authService.updateLastLogin(user);
+    } catch (error) {
+      return res.status(400).json({
+        message: error.message,
+      });
+    }
+
+    return res.json({
+      message: 'User last login updated',
     });
   }
 }

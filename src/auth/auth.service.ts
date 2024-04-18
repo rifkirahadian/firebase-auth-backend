@@ -1,5 +1,5 @@
 import { EntityManager } from '@mikro-orm/postgresql';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { User } from 'src/entities/user.entity';
 import { RegisterDto } from './auth.dto';
 
@@ -14,5 +14,23 @@ export class AuthService {
     user.password = payload.password;
     await this.em.persistAndFlush(user);
     return user;
+  }
+
+  async getUser(uid: string): Promise<User> {
+    const user = await this.em.findOne(User, { uid });
+
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+
+    return user;
+  }
+
+  async updateLastLogin(user: User) {
+    Object.assign(user, {
+      latestLoginAt: new Date(),
+    });
+
+    await this.em.persistAndFlush(user);
   }
 }
